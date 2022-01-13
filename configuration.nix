@@ -9,6 +9,30 @@ let
     url = "https://github.com/nix-community/home-manager/archive/697cc8c68ed6a606296efbbe9614c32537078756.tar.gz";
     sha256 = "1c8gxm86zshr2zj9dvr02qs7y3m46gqavr6wyv01r09jfd99dxz9";     
   };
+
+  vim = pkgs.vim_configurable.customize {
+    name = "vim";
+    vimrcConfig = {
+      packages.myVimPackage.start = [
+        pkgs.vimPlugins.nerdtree
+	pkgs.vimPlugins.vim-nix
+      ];
+      customRC = ''
+        syntax on
+	set nocompatible
+        set number
+        set relativenumber
+        set hidden
+        set colorcolumn=80
+        set smartindent 
+           
+	" hot keys
+	let mapleader = '\'
+        nnoremap <leader>n :NERDTreeFocus<CR>
+        nnoremap <leader>fn :NERDTreeFind<CR>
+      '';
+    }; 
+  };
 in
 
 {
@@ -95,7 +119,7 @@ in
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = [
-    pkgs.vim
+    vim
     pkgs.wget
     pkgs.curl
     pkgs.git
